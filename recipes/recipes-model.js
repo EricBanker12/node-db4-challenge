@@ -17,11 +17,14 @@ function getRecipes() {
 function getShoppingList(recipe_id) {
     return db('recipe_ingredients')
         .join('ingredients', 'recipe_ingredients.ingredient_id', 'ingredients.id')
-        .select('recipe_ingredients.id', 'amount', 'amount_units', 'name')
+        .select('recipe_ingredients.id', 'amount', 'amount_units', 'name', 'ingredients.id as ingredient_id')
         .where({recipe_id})
 }
 
 function getInstructions(recipe_id) {
     return db('instructions')
+        .join('recipes', 'recipes.id', 'instructions.recipe_id')
+        .select('instructions.*', 'name as recipe')
         .where({recipe_id})
+        .orderBy('step_number')
 }
